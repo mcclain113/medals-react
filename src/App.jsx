@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Counter from "./components/Counter";
 import Country from "./components/Country";
 import "./App.css";
 
 function App() {
+  const medals = useRef([
+    { id: 1, name: "gold" },
+    { id: 2, name: "silver" },
+    { id: 3, name: "bronze" },
+  ]);
+
   const [countries, setCountries] = useState([
-    { id: 1, name: "United States", gold: 2 },
-    { id: 2, name: "China", gold: 3 },
-    { id: 3, name: "France", gold: 0 },
+    { id: 1, name: "United States", gold: 2, silver: 2, bronze: 3 },
+    { id: 2, name: "China", gold: 3, silver: 1, bronze: 0 },
+    { id: 3, name: "France", gold: 0, silver: 2, bronze: 1 },
   ]);
 
   function handleDelete(countriesId) {
@@ -15,15 +21,19 @@ function App() {
     setCountries(countries.filter((c) => c.id !== countriesId));
   }
 
-  function handleIncrement(countryId) {
+  function handleIncrement(countryId, medalName) {
     const newCountries = countries.map((c) => {
       if (c.id === countryId) {
-        return { ...c, gold: c.gold + 1 };
+        return { ...c, [medalName]: c[medalName] + 1 };
       }
       return c;
     });
     setCountries(newCountries);
   }
+
+  const getAllMedalsTotal = () => {
+    return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
+  };
 
   return (
     <div className="container">
@@ -32,11 +42,12 @@ function App() {
         <Country
           key={country.id}
           country={country}
+          medals={medals.current}
           onDelete={handleDelete}
           onIncrement={handleIncrement}
         />
       ))}
-      <Counter totalMedals={countries.reduce((a, c) => a + c.gold, 0)} />
+      <Counter totalMedals={getAllMedalsTotal()} />
     </div>
   );
 }
