@@ -31,23 +31,36 @@ function App() {
     setCountries(newCountries);
   }
 
+  function handleDecrement(countryId, medalName) {
+    const newCountries = countries.map((c) => {
+      if (c.id === countryId && c[medalName] > 0) {
+        return { ...c, [medalName]: c[medalName] - 1 };
+      }
+      return c;
+    });
+    setCountries(newCountries);
+  }
+
   const getAllMedalsTotal = () => {
     return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
   };
 
   return (
     <div className="container">
-      <h1>Medal Tracker</h1>
-      {countries.map((country) => (
-        <Country
-          key={country.id}
-          country={country}
-          medals={medals.current}
-          onDelete={handleDelete}
-          onIncrement={handleIncrement}
-        />
-      ))}
       <Counter totalMedals={getAllMedalsTotal()} />
+      <div>
+        {countries.map((country) => (
+          <Country
+            key={country.id}
+            country={country}
+            medals={medals.current}
+            onDelete={handleDelete}
+            onIncrement={handleIncrement}
+            onDecrement={handleDecrement}
+            totalMedalsCountry={country.gold + country.silver + country.bronze}
+          />
+        ))}
+      </div>
     </div>
   );
 }
