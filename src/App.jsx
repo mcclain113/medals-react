@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import Counter from "./components/Counter";
 import Country from "./components/Country";
 import "./App.css";
+import NewCountry from "./components/NewCountry";
 
 function App() {
   const medals = useRef([
@@ -45,6 +46,17 @@ function App() {
     return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
   };
 
+  function handleAdd(name) {
+    console.log(`add ${name}`);
+    const id =
+      countries.length === 0
+        ? 1
+        : Math.max(...countries.map((country) => country.id)) + 1;
+    setCountries(
+      countries.concat({ id: id, name: name, gold: 0, silver: 0, bronze: 0 }),
+    );
+  }
+
   return (
     <div className="container">
       <Counter totalMedals={getAllMedalsTotal()} />
@@ -60,6 +72,7 @@ function App() {
             totalMedalsCountry={country.gold + country.silver + country.bronze}
           />
         ))}
+        <NewCountry onAdd={handleAdd} />
       </div>
     </div>
   );
