@@ -1,4 +1,5 @@
-import { useState, useRef } from "react";
+import axios from "axios";
+import { useState, useEffect, useRef } from "react";
 import Counter from "./components/Counter";
 import Country from "./components/Country";
 import "./App.css";
@@ -11,51 +12,110 @@ function App() {
     { id: 3, name: "bronze" },
   ]);
 
-  const [countries, setCountries] = useState([
-    { id: 1, name: "United States", gold: 2, silver: 2, bronze: 3 },
-    { id: 2, name: "China", gold: 3, silver: 1, bronze: 0 },
-    { id: 3, name: "France", gold: 0, silver: 2, bronze: 1 },
-  ]);
+  const apiEndpoint =
+    "https://wctc-medals-api-cmhxbjfqced4atby.centralus-01.azurewebsites.net/api/country";
 
-  function handleDelete(countriesId) {
+  const [countries, setCountries] = useState([]);
+
+  const handleDelete = async (countriesId) => {
     console.log(`delete country: ${countriesId}`);
+    const originalCountries = countries;
     setCountries(countries.filter((c) => c.id !== countriesId));
-  }
+    try {
+      await axios.delete(`${apiEndpoint}/${countriesId}`);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        // country already deleted
+        console.log(
+          "The record does not exist - it may have already been deleted",
+        );
+      } else {
+        alert("An error occurred while deleting a country");
+        setCountries(originalCountries);
+      }
+    }
+  };
 
-  function handleIncrement(countryId, medalName) {
+  const handleIncrement = async (countryId, medalName) => {
+    const originalCountries = countries;
+    let updatedCountry = {};
     const newCountries = countries.map((c) => {
       if (c.id === countryId) {
-        return { ...c, [medalName]: c[medalName] + 1 };
+        // Create the updated country object
+        updatedCountry = { ...c, [medalName]: c[medalName] + 1 };
+        return updatedCountry;
       }
       return c;
     });
     setCountries(newCountries);
-  }
 
-  function handleDecrement(countryId, medalName) {
+    try {
+      await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
+    } catch (ex) {
+      console.log("Error updating medal count:", ex);
+      setCountries(originalCountries);
+      alert("An error occurred while updating the medal count.");
+    }
+  };
+
+  const handleDecrement = async (countryId, medalName) => {
+    const originalCountries = countries;
+
+    let updatedCountry = {};
     const newCountries = countries.map((c) => {
       if (c.id === countryId && c[medalName] > 0) {
-        return { ...c, [medalName]: c[medalName] - 1 };
+        updatedCountry = { ...c, [medalName]: c[medalName] - 1 };
+        return updatedCountry;
       }
       return c;
     });
+
+    if (Object.keys(updatedCountry).length === 0) return;
+
     setCountries(newCountries);
-  }
+
+    try {
+      await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
+    } catch (ex) {
+      console.log("Error updating medal count:", ex);
+      setCountries(originalCountries);
+      alert("An error occurred while updating the medal count.");
+    }
+  };
 
   const getAllMedalsTotal = () => {
     return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
   };
 
-  function handleAdd(name) {
+  const handleAdd = async (name) => {
     console.log(`add ${name}`);
-    const id =
-      countries.length === 0
-        ? 1
-        : Math.max(...countries.map((country) => country.id)) + 1;
-    setCountries(
-      countries.concat({ id: id, name: name, gold: 0, silver: 0, bronze: 0 }),
-    );
-  }
+    // const id =
+    //   countries.length === 0
+    //     ? 1
+    //     : Math.max(...countries.map((country) => country.id)) + 1;
+    try {
+      const { data: post } = await axios.post(apiEndpoint, {
+        id: id,
+        name: name,
+        gold: 0,
+        silver: 0,
+        bronze: 0,
+      });
+      setCountries(countries.concat(post));
+    } catch (error) {
+      console.error("Error adding country:", error);
+      alert("Failed to add country");
+    }
+  };
+
+  useEffect(() => {
+    // initial data loaded here
+    async function fetchData() {
+      const { data: fetchedCountries } = await axios.get(apiEndpoint);
+      setCountries(fetchedCountries);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div className="container">
