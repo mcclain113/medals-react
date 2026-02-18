@@ -130,3 +130,4 @@
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/obj/Release/net8.0/medals-react.pdb
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/obj/Release/net8.0/medals-react.genruntimeconfig.cache
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/obj/Release/net8.0/ref/medals-react.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/global.json

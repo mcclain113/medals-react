@@ -6,6 +6,18 @@ IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "Open",
+        builder =>
+        {
+            builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 // Register the DataContext service
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(configuration["ConnectionStrings:DefaultSQLiteConnection"]));
@@ -32,6 +44,12 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 // }
+
+app.UseCors("Open");
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 
 app.UseHttpsRedirection();
 

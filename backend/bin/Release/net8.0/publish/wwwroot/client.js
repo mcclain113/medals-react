@@ -1,5 +1,5 @@
 window.addEventListener("load", (event) => {
-  getData("/api/word");
+  getData("/api/country");
 });
 
 // get initial data from db using AJAX
@@ -23,8 +23,7 @@ function showData(data) {
   for (let i = 0; i < data.length; i++) {
     console.log(data[i]);
     let el = document.createElement("div");
-    el.innerText = data[i].text;
-    el.style.color = `rgb(${data[i].r}, ${data[i].g}, ${data[i].b})`;
+    el.innerText = data[i].name;
     container.appendChild(el);
   }
 }

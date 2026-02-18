@@ -1,6 +1,8 @@
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/appsettings.Development.json
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/appsettings.json
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/global.json
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/appdb.sqlite
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.runtimeconfig.json
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.pdb

@@ -95,7 +95,6 @@ function App() {
     //     : Math.max(...countries.map((country) => country.id)) + 1;
     try {
       const { data: post } = await axios.post(apiEndpoint, {
-        id: id,
         name: name,
         gold: 0,
         silver: 0,
