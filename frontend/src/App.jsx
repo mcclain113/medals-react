@@ -4,12 +4,24 @@ import Counter from "./components/Counter";
 import Country from "./components/Country";
 import "./App.css";
 import NewCountry from "./components/NewCountry";
+import {
+  Theme,
+  Button,
+  Flex,
+  Heading,
+  Badge,
+  Container,
+  Grid,
+} from "@radix-ui/themes";
+import { SunIcon, MoonIcon } from "@radix-ui/react-icons";
+import "@radix-ui/themes/styles.css";
 
 function App() {
+  const [appearance, setAppearance] = useState("dark");
   const medals = useRef([
-    { id: 1, name: "gold" },
-    { id: 2, name: "silver" },
-    { id: 3, name: "bronze" },
+    { id: 1, name: "gold", color: "#FFD700" },
+    { id: 2, name: "silver", color: "#C0C0C0" },
+    { id: 3, name: "bronze", color: "#CD7F32" },
   ]);
 
   const apiEndpoint =
@@ -87,6 +99,10 @@ function App() {
     return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
   };
 
+  function toggleAppearance() {
+    setAppearance(appearance === "light" ? "dark" : "light");
+  }
+
   const handleAdd = async (name) => {
     console.log(`add ${name}`);
     // const id =
@@ -117,23 +133,39 @@ function App() {
   }, []);
 
   return (
-    <div className="container">
-      <Counter totalMedals={getAllMedalsTotal()} />
-      <div>
-        {countries.map((country) => (
-          <Country
-            key={country.id}
-            country={country}
-            medals={medals.current}
-            onDelete={handleDelete}
-            onIncrement={handleIncrement}
-            onDecrement={handleDecrement}
-            totalMedalsCountry={country.gold + country.silver + country.bronze}
-          />
-        ))}
+    <Theme appearance={appearance}>
+      <Button
+        onClick={toggleAppearance}
+        style={{ position: "fixed", bottom: 20, right: 20, zIndex: 100 }}
+        variant="ghost"
+      >
+        {appearance === "dark" ? <MoonIcon /> : <SunIcon />}
+      </Button>
+      <Flex p="2" pl="8" className="fixedHeader" justify="between">
+        <Heading size="6">
+          Olympic Medals
+          <Badge variant="outline" ml="2">
+            <Heading size="6">{getAllMedalsTotal()}</Heading>
+          </Badge>
+        </Heading>
         <NewCountry onAdd={handleAdd} />
-      </div>
-    </div>
+      </Flex>
+      <Container className="bg"></Container>
+      <Grid pt="2" gap="2" className="grid-container">
+        {countries
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((country) => (
+            <Country
+              key={country.id}
+              country={country}
+              medals={medals.current}
+              onDelete={handleDelete}
+              onIncrement={handleIncrement}
+              onDecrement={handleDecrement}
+            />
+          ))}
+      </Grid>
+    </Theme>
   );
 }
 

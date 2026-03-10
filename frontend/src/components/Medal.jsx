@@ -1,25 +1,42 @@
-export default function Medal(props) {
-  const { medal, count, onIncrement, onDecrement } = props;
+import { Box, Table, Flex, Badge, Button } from "@radix-ui/themes";
+import { MinusIcon, PlusIcon } from "@radix-ui/react-icons";
+import { tc } from "../Utils.js";
+import MedalSvg from "./MedalSvg";
 
+function Medal(props) {
   return (
-    <div className="medal-row">
-      <p>
-        {medal.name.charAt(0).toUpperCase() + medal.name.slice(1)} Medals:{" "}
-        <button
-          onClick={onDecrement}
-          className={`button button-${medal.name}`}
-          disabled={count === 0}
-        >
-          -
-        </button>
-        <strong> {count} </strong>
-        <button onClick={onIncrement} className={`button button-${medal.name}`}>
-          +
-        </button>
-      </p>
-
-      <br></br>
-      <br></br>
-    </div>
+    <Table.Row>
+      <Table.RowHeaderCell>
+        <Flex align="center">
+          <MedalSvg color={props.medal.color} />
+          <Box pl="2">{tc(props.medal.name)} Medals</Box>
+        </Flex>
+      </Table.RowHeaderCell>
+      <Table.Cell align="right" width="108px">
+        <Flex align="center" justify="between">
+          <Button
+            variant="ghost"
+            disabled={props.country[props.medal.name] === 0}
+          >
+            <MinusIcon
+              onClick={() =>
+                props.country[props.medal.name] > 0 &&
+                props.onDecrement(props.country.id, props.medal.name)
+              }
+            />
+          </Button>
+          <Badge variant="outline">{props.country[props.medal.name]}</Badge>
+          <Button variant="ghost">
+            <PlusIcon
+              onClick={() =>
+                props.onIncrement(props.country.id, props.medal.name)
+              }
+            />
+          </Button>
+        </Flex>
+      </Table.Cell>
+    </Table.Row>
   );
 }
+
+export default Medal;

@@ -6,6 +6,8 @@
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.runtimeconfig.json
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/medals-react.pdb
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.AspNetCore.JsonPatch.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.Data.Sqlite.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.EntityFrameworkCore.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.EntityFrameworkCore.Abstractions.dll
@@ -13,6 +15,8 @@
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.EntityFrameworkCore.Sqlite.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.Extensions.DependencyModel.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Microsoft.OpenApi.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Newtonsoft.Json.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/Newtonsoft.Json.Bson.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/SQLitePCLRaw.batteries_v2.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/SQLitePCLRaw.core.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Release/net8.0/publish/SQLitePCLRaw.provider.e_sqlite3.dll
