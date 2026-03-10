@@ -48,88 +48,170 @@ function App() {
     }
   };
 
-  const handleIncrement = async (countryId, medalName) => {
-    const originalCountries = countries;
-    let updatedCountry = {};
-    const newCountries = countries.map((c) => {
-      if (c.id === countryId) {
-        // Create the updated country object
-        updatedCountry = { ...c, [medalName]: c[medalName] + 1 };
-        return updatedCountry;
-      }
-      return c;
-    });
-    setCountries(newCountries);
+  function handleUpdate(countryId, medalName, factor) {
+    const idx = countries.findIndex((c) => c.id === countryId);
+    const mutableCountries = [...countries];
+    mutableCountries[idx][medalName].page_value += 1 * factor;
+    setCountries(mutableCountries);
+  }
 
-    try {
-      await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
-    } catch (ex) {
-      console.log("Error updating medal count:", ex);
-      setCountries(originalCountries);
-      alert("An error occurred while updating the medal count.");
-    }
-  };
+  function handleIncrement(countryId, medalName) {
+    handleUpdate(countryId, medalName, 1);
+    // const originalCountries = countries;
+    // let updatedCountry = {};
+    // const newCountries = countries.map((c) => {
+    //   if (c.id === countryId) {
+    //     // Create the updated country object
+    //     updatedCountry = { ...c, [medalName]: c[medalName] + 1 };
+    //     return updatedCountry;
+    //   }
+    //   return c;
+    // });
+    // setCountries(newCountries);
+
+    // try {
+    //   await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
+    // } catch (ex) {
+    //   console.log("Error updating medal count:", ex);
+    //   setCountries(originalCountries);
+    //   alert("An error occurred while updating the medal count.");
+    // }
+  }
 
   const handleDecrement = async (countryId, medalName) => {
-    const originalCountries = countries;
+    // const originalCountries = countries;
 
-    let updatedCountry = {};
-    const newCountries = countries.map((c) => {
-      if (c.id === countryId && c[medalName] > 0) {
-        updatedCountry = { ...c, [medalName]: c[medalName] - 1 };
-        return updatedCountry;
-      }
-      return c;
-    });
+    // let updatedCountry = {};
+    // const newCountries = countries.map((c) => {
+    //   if (c.id === countryId && c[medalName] > 0) {
+    //     updatedCountry = { ...c, [medalName]: c[medalName] - 1 };
+    //     return updatedCountry;
+    //   }
+    //   return c;
+    // });
 
-    if (Object.keys(updatedCountry).length === 0) return;
+    // if (Object.keys(updatedCountry).length === 0) return;
 
-    setCountries(newCountries);
+    // setCountries(newCountries);
 
-    try {
-      await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
-    } catch (ex) {
-      console.log("Error updating medal count:", ex);
-      setCountries(originalCountries);
-      alert("An error occurred while updating the medal count.");
-    }
+    // try {
+    //   await axios.put(`${apiEndpoint}/${countryId}`, updatedCountry);
+    // } catch (ex) {
+    //   console.log("Error updating medal count:", ex);
+    //   setCountries(originalCountries);
+    //   alert("An error occurred while updating the medal count.");
+    // }
+    handleUpdate(countryId, medalName, -1);
   };
 
   const getAllMedalsTotal = () => {
-    return countries.reduce((a, c) => a + c.gold + c.silver + c.bronze, 0);
+    let sum = 0;
+    // use medal count displayed in the web page for medal count totals
+    medals.current.forEach((medal) => {
+      sum += countries.reduce((a, b) => a + b[medal.name].page_value, 0);
+    });
+    return sum;
   };
 
   function toggleAppearance() {
     setAppearance(appearance === "light" ? "dark" : "light");
   }
 
-  const handleAdd = async (name) => {
-    console.log(`add ${name}`);
-    // const id =
-    //   countries.length === 0
-    //     ? 1
-    //     : Math.max(...countries.map((country) => country.id)) + 1;
+  async function handleSave(countryId) {
+    const originalCountries = countries;
+
+    const idx = countries.findIndex((c) => c.id === countryId);
+    const mutableCountries = [...countries];
+    const country = mutableCountries[idx];
+    let jsonPatch = [];
+    medals.current.forEach((medal) => {
+      if (country[medal.name].page_value !== country[medal.name].saved_value) {
+        jsonPatch.push({
+          op: "replace",
+          path: medal.name,
+          value: country[medal.name].page_value,
+        });
+        country[medal.name].saved_value = country[medal.name].page_value;
+      }
+    });
+    console.log(
+      `json patch for id: ${countryId}: ${JSON.stringify(jsonPatch)}`,
+    );
+    // update state
+    setCountries(mutableCountries);
+
     try {
-      const { data: post } = await axios.post(apiEndpoint, {
-        name: name,
-        gold: 0,
-        silver: 0,
-        bronze: 0,
-      });
-      setCountries(countries.concat(post));
-    } catch (error) {
-      console.error("Error adding country:", error);
-      alert("Failed to add country");
+      await axios.patch(`${apiEndpoint}/${countryId}`, jsonPatch);
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        // country already deleted
+        console.log(
+          "The record does not exist - it may have already been deleted",
+        );
+      } else {
+        alert("An error occurred while updating");
+        setCountries(originalCountries);
+      }
     }
+  }
+  function handleReset(countryId) {
+    // to reset, make page value the same as the saved value
+    const idx = countries.findIndex((c) => c.id === countryId);
+    const mutableCountries = [...countries];
+    const country = mutableCountries[idx];
+    medals.current.forEach((medal) => {
+      country[medal.name].page_value = country[medal.name].saved_value;
+    });
+    setCountries(mutableCountries);
+  }
+
+  const handleAdd = async (name) => {
+    try {
+      const { data: post } = await axios.post(apiEndpoint, { name: name });
+      let newCountry = {
+        id: post.id,
+        name: post.name,
+      };
+      console.log(newCountry);
+      medals.current.forEach((medal) => {
+        const count = post[medal.name];
+        // when a new country is added, we need to store page and saved values for
+        // medal counts in state
+        newCountry[medal.name] = { page_value: count, saved_value: count };
+      });
+      setCountries(countries.concat(newCountry));
+    } catch (ex) {
+      if (ex.response) {
+        console.log(ex.response);
+      } else {
+        console.log("Request failed");
+      }
+    }
+    console.log("ADD");
   };
 
   useEffect(() => {
     // initial data loaded here
-    async function fetchData() {
+    async function fetchCountries() {
       const { data: fetchedCountries } = await axios.get(apiEndpoint);
-      setCountries(fetchedCountries);
+      // we need to save the original medal count values in state
+      let newCountries = [];
+      fetchedCountries.forEach((country) => {
+        let newCountry = {
+          id: country.id,
+          name: country.name,
+        };
+        medals.current.forEach((medal) => {
+          const count = country[medal.name];
+          // page_value is what is displayed on the web page
+          // saved_value is what is saved to the database
+          newCountry[medal.name] = { page_value: count, saved_value: count };
+        });
+        newCountries.push(newCountry);
+      });
+      setCountries(newCountries);
     }
-    fetchData();
+    fetchCountries();
   }, []);
 
   return (
@@ -160,6 +242,8 @@ function App() {
               country={country}
               medals={medals.current}
               onDelete={handleDelete}
+              onSave={handleSave}
+              onReset={handleReset}
               onIncrement={handleIncrement}
               onDecrement={handleDecrement}
             />

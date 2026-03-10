@@ -264,3 +264,7 @@
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/obj/Debug/net8.0/ref/medals-react.dll
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/medals-react.staticwebassets.runtime.json
 /home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/global.json
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/Microsoft.AspNetCore.JsonPatch.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/Newtonsoft.Json.dll
+/home/barrymcclainrx/WebstormProjects/medals-react/backend/bin/Debug/net8.0/Newtonsoft.Json.Bson.dll
