@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("medals-react")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+abd837eb8e3f35a3fc074a3a2419a70081637a92")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+de0c4f40a276c935dbb070e5709d196ea0c7117b")]
 [assembly: System.Reflection.AssemblyProductAttribute("medals-react")]
 [assembly: System.Reflection.AssemblyTitleAttribute("medals-react")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
