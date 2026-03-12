@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace medals_react.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260217040945_initSQLite")]
-    partial class initSQLite
+    [Migration("20260312011033_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

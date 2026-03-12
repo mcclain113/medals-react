@@ -1,5 +1,5 @@
 import Medal from "./Medal";
-import { Box, Table, Flex, Badge, Button } from "@radix-ui/themes";
+import { Box, Table, Flex, Badge, Button, Tooltip } from "@radix-ui/themes";
 import { TrashIcon, CheckIcon, ResetIcon } from "@radix-ui/react-icons";
 
 function Country(props) {
@@ -47,29 +47,38 @@ function Country(props) {
                 >
                   {renderSaveButton() && (
                     <>
-                      <Button
-                        color="gray"
-                        variant="ghost"
-                        size="1"
-                        onClick={() => props.onReset(props.country.id)}
-                      >
-                        <ResetIcon />
-                      </Button>
-                      <Button
-                        color="gray"
-                        variant="ghost"
-                        size="1"
-                        onClick={() => props.onSave(props.country.id)}
-                      >
-                        <CheckIcon />
-                      </Button>
+                      {" "}
+                      <Tooltip content="Undo">
+                        <Button
+                          color="gray"
+                          variant="ghost"
+                          size="1"
+                          onClick={() => props.onReset(props.country.id)}
+                        >
+                          <ResetIcon />
+                        </Button>
+                      </Tooltip>{" "}
+                      <Tooltip content="Save">
+                        <Button
+                          color="gray"
+                          variant="ghost"
+                          size="1"
+                          onClick={() => props.onSave(props.country.id)}
+                        >
+                          <CheckIcon />
+                        </Button>
+                      </Tooltip>
                     </>
                   )}
-                  <Button color="red" variant="ghost" size="1">
-                    <TrashIcon
-                      onClick={() => props.onDelete(props.country.id)}
-                    />
-                  </Button>
+                  {props.canDelete && (
+                    <Tooltip content="Delete">
+                      <Button color="red" variant="ghost" size="1">
+                        <TrashIcon
+                          onClick={() => props.onDelete(props.country.id)}
+                        />
+                      </Button>
+                    </Tooltip>
+                  )}
                 </div>
               </Flex>
             </Table.ColumnHeaderCell>
@@ -83,6 +92,7 @@ function Country(props) {
                 key={medal.id}
                 medal={medal}
                 country={props.country}
+                canPatch={props.canPatch}
                 onIncrement={props.onIncrement}
                 onDecrement={props.onDecrement}
               />

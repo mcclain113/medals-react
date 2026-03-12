@@ -5,7 +5,7 @@
 namespace medals_react.Migrations
 {
     /// <inheritdoc />
-    public partial class initSQLite : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
